@@ -1,4 +1,4 @@
-import core from '@actions/core'
+import {getInput, info, setFailed} from '@actions/core'
 import {GitHub} from '@actions/github'
 
 function parseClubhouseIds(str: string) {
@@ -31,23 +31,23 @@ function convertTickets(text: string, options: {clubhouseWorkspace?: string}) {
   return result
 }
 
-async function run() {
+async function main() {
   const {GITHUB_SHA, GITHUB_REPOSITORY} = process.env
 
   if (!GITHUB_SHA) {
-    core.setFailed('Could not detect GITHUB_SHA environment variable')
+    setFailed('Could not detect GITHUB_SHA environment variable')
     return
   }
 
   if (!GITHUB_REPOSITORY) {
-    core.setFailed('Could not detect GITHUB_REPOSITORY environment variable')
+    setFailed('Could not detect GITHUB_REPOSITORY environment variable')
     return
   }
 
   const [owner, repo] = GITHUB_REPOSITORY.split('/')
-  const token = core.getInput('githubToken', {required: true})
-  const autoVersion = core.getInput('autoVersion') === 'true'
-  const clubhouseWorkspace = core.getInput('clubhouse')
+  const token = getInput('githubToken', {required: true})
+  const autoVersion = getInput('autoVersion') === 'true'
+  const clubhouseWorkspace = getInput('clubhouse')
   const octokit = new GitHub(token)
 
   const {data: prs} = await octokit.repos.listPullRequestsAssociatedWithCommit({
@@ -57,7 +57,7 @@ async function run() {
   })
 
   if (!prs.length) {
-    core.info('No Pull Requests linked to this commit')
+    info('No Pull Requests linked to this commit')
     return
   }
 
@@ -79,7 +79,7 @@ async function run() {
   let release_id = latestDraft?.id
 
   if (!release_id) {
-    core.info('No current draft release found. Creating new draft.')
+    info('No current draft release found. Creating new draft.')
     const {data: newDraft} = await octokit.repos.createRelease({
       owner,
       repo,
@@ -96,7 +96,7 @@ async function run() {
     lines.push(`- ${title} ([#${pr.number}](${pr.html_url}))`)
   })
 
-  core.info(
+  info(
     `Updating release id: ${release_id} with reference to ${prs.length} pull requests`
   )
 
@@ -105,8 +105,12 @@ async function run() {
   await octokit.repos.updateRelease({owner, repo, tag_name, release_id, body})
 }
 
-try {
-  run()
-} catch (e) {
-  core.setFailed(`Action failed with error ${e}`)
+async function run() {
+  try {
+    await main()
+  } catch (e) {
+    setFailed(`Action failed with error ${e}`)
+  }
 }
+
+run()
