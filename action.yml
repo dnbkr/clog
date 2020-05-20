@@ -1,4 +1,4 @@
-name: 'Clog'
+name: 'Clog - Auto Changelog'
 description: 'Put your Pull Requests in your Release Notes'
 author: 'coffeedoughnuts'
 inputs:
