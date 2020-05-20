@@ -1,0 +1,17 @@
+name: 'Clog'
+description: 'Put your Pull Requests in your Release Notes'
+author: 'coffeedoughnuts'
+inputs:
+  githubToken:
+    description: 'Your GitHub Token'
+    required: true
+  autoVersion:
+    description: 'Should the draft have an auto-incremented version'
+    required: false
+    default: 'false'
+  clubhouse:
+    description: 'If you want Clubhouse IDs linked, provide your workspace name'
+    required: false
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
