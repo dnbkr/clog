@@ -1,8 +1,9 @@
 name: 'Clog - Auto Changelog'
 description: 'Put your Pull Requests in your Release Notes'
 author: 'coffeedoughnuts'
-icon: 'package'
-color: 'purple'
+branding:
+  icon: 'package'
+  color: 'purple'
 inputs:
   githubToken:
     description: 'Your GitHub Token'
