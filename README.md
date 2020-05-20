@@ -14,9 +14,9 @@ Set this to `'true'` if you want the draft release to be your previous release n
 
 ### `clubhouse`
 
-Set this to your [Clubhouse](https://clubhouse.io) Workspace name (from the clubhouse URL) if you want references to clubhouse stories to be enhanced as links (e.g. if your Pull Request title looks like `Fix: major bug with frontend ch123` then the `ch123` part will be a link to the story in your release notes)
+Set this to your [Clubhouse](https://clubhouse.io) Workspace name (from the clubhouse URL) if you want references to clubhouse stories to be enhanced as links (e.g. if your Pull Request title looks like `Fix: major bug with frontend [ch123]` then the `[ch123]` part will be a link to the story in your release notes)
 
-__want to see this feature with your project management tool of choice? submit a PR today!__
+_want to see this feature with your project management tool of choice? submit a PR today!_
 
 ## Example usage
 
