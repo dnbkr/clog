@@ -45,3 +45,24 @@ with:
   githubToken: ${{ secrets.GITHUB_TOKEN }}
   clubhouse: 'my-workspace-name'
 ```
+
+You will likely want it running on every push to master. Here's an example of a complete Workflow:
+
+```yml
+name: Draft Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: coffeedoughnuts/clog@v1
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+```
