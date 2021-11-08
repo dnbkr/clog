@@ -1,8 +1,8 @@
 import {getInput, info, setFailed} from '@actions/core'
 import {GitHub} from '@actions/github'
 
-function parseClubhouseIds(str: string) {
-  const regex = /\Wch([0-9]+)[\W$]/g
+function parseShortcutIds(str: string) {
+  const regex = /\Wsc([0-9]+)[\W$]/g
   const ids = []
   let match = regex.exec(str)
   while (match !== null) {
@@ -12,21 +12,21 @@ function parseClubhouseIds(str: string) {
   return ids
 }
 
-function convertClubhouseIdsToLinks(chunk: string, workspace: string) {
-  const clubhouseIds = parseClubhouseIds(chunk)
-  clubhouseIds.forEach(id => {
+function convertShortcutIdsToLinks(chunk: string, workspace: string) {
+  const shortcutIds = parseShortcutIds(chunk)
+  shortcutIds.forEach(id => {
     chunk = chunk.replace(
-      `ch${id}`,
-      `[ch${id}](https://app.clubhouse.io/${workspace}/story/${id})`
+      `sc${id}`,
+      `[sc${id}](https://app.shortcut.io/${workspace}/story/${id})`
     )
   })
   return chunk
 }
 
-function convertTickets(text: string, options: {clubhouseWorkspace?: string}) {
+function convertTickets(text: string, options: {shortcutWorkspace?: string}) {
   let result = text
-  if (options.clubhouseWorkspace) {
-    result = convertClubhouseIdsToLinks(text, options.clubhouseWorkspace)
+  if (options.shortcutWorkspace) {
+    result = convertShortcutIdsToLinks(text, options.shortcutWorkspace)
   }
   return result
 }
@@ -47,7 +47,7 @@ async function main() {
   const [owner, repo] = GITHUB_REPOSITORY.split('/')
   const token = getInput('githubToken', {required: true})
   const autoVersion = getInput('autoVersion') === 'true'
-  const clubhouseWorkspace = getInput('clubhouse')
+  const shortcutWorkspace = getInput('shortcut')
   const octokit = new GitHub(token)
 
   const {data: prs} = await octokit.repos.listPullRequestsAssociatedWithCommit({
@@ -92,7 +92,7 @@ async function main() {
   }
 
   prs.forEach(pr => {
-    const title = convertTickets(pr.title, {clubhouseWorkspace})
+    const title = convertTickets(pr.title, {shortcutWorkspace})
     lines.push(`- ${title} ([#${pr.number}](${pr.html_url}))`)
   })
 

@@ -12,8 +12,8 @@ inputs:
     description: 'Should the draft have an auto-incremented version'
     required: false
     default: 'false'
-  clubhouse:
-    description: 'If you want Clubhouse IDs linked, provide your workspace name'
+  shortcut:
+    description: 'If you want Shortcut IDs linked, provide your workspace name'
     required: false
 runs:
   using: 'node12'
